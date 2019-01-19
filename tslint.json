@@ -1,0 +1,40 @@
+{
+  "defaultSeverity": "error",
+  "rules": {
+      "semicolon": [true, "always"],
+      "prefer-const": [true],
+      "indent": [true, "spaces", 2],
+      "quotemark": [true, "single"],
+      "prefer-template": [true, "allow-single-concat"],
+      "no-consecutive-blank-lines": true,
+      "space-before-function-paren": [true, "always"],
+      "whitespace": [true,
+          "check-branch",
+          "check-decl",
+          "check-operator",
+          "check-module",
+          "check-separator",
+          "check-rest-spread",
+          "check-type",
+          "check-typecast",
+          "check-type-operator",
+          "check-preblock"
+      ],
+      "space-within-parens": [true, 0],
+      "ordered-imports": true,
+      "object-literal-shorthand": [true],
+      "no-trailing-whitespace": true,
+      "no-irregular-whitespace": true,
+      "arrow-return-shorthand": true,
+      "arrow-parens": [ true, "ban-single-arg-parens" ],
+      "align": [
+          true, 
+          "arguments",
+          "elements",
+          "members",
+          "parameters",
+          "statements"
+      ],
+      "no-unused-variable": true
+  }
+}
