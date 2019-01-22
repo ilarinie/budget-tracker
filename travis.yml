@@ -1,3 +1,9 @@
 language: node_js
 node_js:
   - "10"
+services:
+  - postgresql
+before-script:
+  - psql -c 'create user budget-tracker with encrypted password 'password123';'
+  - psql -c 'create database budget-tracker-test;' -U budget-tracker
+  - psql budget-tracker -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
