@@ -1,23 +1,30 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import bcrypt from 'bcrypt';
+import { BaseEntity, BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Purchase } from './Purchase';
 import { PurchaseCategory } from './PurchaseCategory';
 
 @Entity()
 export class User extends BaseEntity {
 
-    @PrimaryGeneratedColumn()
-    id!: number;
+    @PrimaryGeneratedColumn('uuid')
+    id!: string;
 
-    @Column()
+    @Column({ nullable: false })
     username!: string;
 
     @Column()
-    displayName!: string;
+    password!: string;
 
     @OneToMany(type => Purchase, purchase => purchase.user)
     purchases!: Purchase[];
 
-    @OneToMany(type => PurchaseCategory, category => category.user_id)
+    @OneToMany(type => PurchaseCategory, category => category.user)
     categories!: PurchaseCategory[];
+
+    @BeforeInsert()
+    hashPassword = async () => {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+    }
 
 }

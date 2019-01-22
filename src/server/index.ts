@@ -1,22 +1,21 @@
-import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import express from 'express';
 import 'reflect-metadata';
-import { getManager } from 'typeorm';
-import { initializeDB } from '../db';
-import { Purchase } from '../entity/Purchase';
-import { User } from '../entity/User';
+import apolloServer from '../graphql';
+import { loggerMiddleWare } from '../logger/middleware';
+import { handleLogin } from './auth';
 
+/* Setup express */
 const app = express();
+app.use(bodyParser.json());
 
-app.get('/', async (req: Request, res: Response) => {
-    const users = await User.find({ relations: ['purchases', 'purchases.categories']});
-    users.forEach(u => {
-        console.log(u);
-    });
-    const purchases = await Purchase.find({ relations: ['categories']});
-    purchases.forEach(p => {
-        console.log(p);
-    });
-    res.send('OK');
-});
+/* Set up logging requests */
+app.use(loggerMiddleWare);
+
+/* Auth route */
+app.post('/login', handleLogin);
+
+/* Setup graphql server */
+apolloServer.applyMiddleware({app});
 
 export default app;

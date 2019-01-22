@@ -5,17 +5,16 @@ import { User } from './User';
 @Entity()
 export class PurchaseCategory extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id!: number;
 
-  @Column()
+  @Column({ nullable: false })
   name!: string;
 
-  @ManyToMany(type => Purchase, purchase => purchase.categories)
-  @JoinTable()
-  purchases!: Purchase[];
+  @ManyToOne(type => User, user => user.categories, { nullable: false })
+  user!: User;
 
-  @ManyToOne(type => User)
-  user_id!: number;
+  @ManyToMany(type => Purchase, purchase => purchase.categories)
+  purchases!: Purchase[];
 
 }
