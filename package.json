@@ -6,7 +6,7 @@
    "scripts": {
       "dev": "nodemon",
       "watch": "NODE_ENV=test nyc --reporter html mocha -w --recursive --require ts-node/register --watch-extensions ts,tsx \"test/**/*.{ts,tsx}\" ",
-      "test": "NODE_ENV=test nyc --reporter html mocha -w --recursive --require ts-node/register \"test/**/*.{ts,tsx}\" ",
+      "test": "NODE_ENV=test nyc --reporter html mocha --exit --recursive --require ts-node/register \"test/**/*.{ts,tsx}\" ",
       "start": "ts-node src/index.ts"
    },
    "author": "",
