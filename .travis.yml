@@ -4,5 +4,5 @@ node_js:
 services:
   - postgresql
 before_script:
-  - psql -c 'create database budget-tracker-test;' -U postgres
-  - psql budget-tracker-test -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+  - psql -c 'create database budget_tracker_test;' -U postgres
+  - psql budget_tracker_test -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
