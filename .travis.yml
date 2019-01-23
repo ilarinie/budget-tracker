@@ -6,10 +6,7 @@ services:
 before_script:
   - psql -c 'create database budget_tracker_test;' -U postgres
   - psql budget_tracker_test -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
-  
+  - npm install -g mocha
+  - npm install -g codeclimate-test-reporter
+after_success:
+  - codeclimate < ./coverage/lcov.info
