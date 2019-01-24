@@ -3,6 +3,7 @@
 .nyc_output
 .env
 
+test.log
 app.log
 node_modules/
 build/

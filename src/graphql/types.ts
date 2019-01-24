@@ -23,6 +23,10 @@ export const typeDefs = gql`
     categories: [PurchaseCategory]
   }
 
+  type Response {
+    success: Boolean
+  }
+
   type Query {
     user: User
   }
@@ -33,8 +37,17 @@ export const typeDefs = gql`
     addPurchase(description: String!, amount: Float!, categories: [String]): Purchase,
     updateCategory(name: String): PurchaseCategory,
     updatePurchase(amount: Float, description: String, categories: [String]): Purchase,
-    removePurchase(id: ID!): ID,
-    removeCategory(id: ID!): ID,
+    removePurchase(id: ID!): Response,
+    removeCategory(id: ID!): Response,
   }
 
 `;
+
+export class Response {
+
+  constructor (success: boolean) {
+    this.success = success;
+  }
+
+  success: boolean;
+}

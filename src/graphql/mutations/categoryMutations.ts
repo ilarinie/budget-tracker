@@ -1,6 +1,7 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { PurchaseCategory } from '../../entity/PurchaseCategory';
 import logger from '../../logger';
+import { Response } from '../types';
 
 export const addCategory = async (parent, args, context) => {
   const category = new PurchaseCategory();
@@ -14,7 +15,7 @@ export const removeCategory = async (parent, args, context) => {
   const category = await PurchaseCategory.findOneOrFail(args.id);
   if (category.user = context.user) {
     await category.remove();
-    return category.id;
+    return new Response(true);
   }
   throw new AuthenticationError('Unauthorized');
 };

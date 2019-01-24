@@ -1,6 +1,7 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { Purchase } from '../../entity/Purchase';
 import { PurchaseCategory } from '../../entity/PurchaseCategory';
+import { Response } from '../types';
 
 export const addPurchase = async (parent, args, context) => {
   const purchase = new Purchase();
@@ -16,11 +17,11 @@ export const addPurchase = async (parent, args, context) => {
   return await Purchase.findOne({ id: savedPurchase.id }, { relations: [ 'user', 'categories' ]});
 };
 
-export const removePurchase = async (parent, args, context) => {
-  const purchase = await Purchase.findOneOrFail(args.id);
-  if (purchase.user == context.user) {
+export const removePurchase = async (parent, args, context): Promise<Response> => {
+  const purchase = await Purchase.findOneOrFail(args.id, { relations: ['user'] });
+  if (purchase.user.id == context.user.id) {
     await purchase.remove();
-    return purchase.id;
+    return new Response(true);
   }
   throw new AuthenticationError('Unauthorized');
 };
