@@ -61,7 +61,7 @@ describe('GraphQL server', () => {
     const purchase = await client.query({ query: ADD_PURCHASE, variables: { description: 'purch', amount: 22, categories: [retUser.categories[0].id] } });
     res = await client.query({ query: GET_USER });
     retUser = res.data.user;
-    assert.equal(retUser.purchases[1].amount, 22);
+    assert.equal(retUser.purchases[retUser.purchases.length - 1].amount, 22);
     assert.equal(retUser.purchases[1].description, 'purch');
     assert.equal(retUser.purchases[1].categories[0].name, 'cat1');
   });
