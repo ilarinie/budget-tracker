@@ -14,10 +14,10 @@ export class Purchase extends BaseEntity {
   @Column({ type: 'float', scale: 6, nullable: false})
   amount!: number;
 
-  @CreateDateColumn({type: 'date', nullable: false })
+  @CreateDateColumn({type: 'timestamp', nullable: false })
   created_at!: Date;
 
-  @UpdateDateColumn({ type: 'date', nullable: false})
+  @UpdateDateColumn({ type: 'timestamp', nullable: false})
   updated_at!: Date;
 
   @ManyToOne(type => User, user => user.purchases, { nullable: false })

@@ -15,6 +15,8 @@ export const GET_USER = gql`
         categories {
           name
         }
+        created_at
+        updated_at
       }
       categories {
         id

@@ -13,6 +13,8 @@ export const typeDefs = gql`
     description: String
     amount: Float
     categories: [PurchaseCategory]
+    created_at: String
+    updated_at: String
   }
 
   type User {
