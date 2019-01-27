@@ -1,4 +1,5 @@
 import { ApolloServer, AuthenticationError, gql } from 'apollo-server-express';
+import { IResolvers } from 'graphql-tools';
 import jwt from 'jsonwebtoken';
 import { User } from '../entity/User';
 import logger from '../logger';
@@ -6,10 +7,13 @@ import { addCategory, addPurchase, removeCategory, removePurchase, updateCategor
 import { user } from './queries';
 import { typeDefs } from './types';
 
-export const resolvers = {
+// @ts-ignore
+export const resolvers: IResolvers = {
   Query: {
     user
   },
+  // TS ignore here to allow for parameter destructuring on resolvers
+  // @ts-ignore
   Mutation: {
     addCategory,
     addPurchase,
@@ -21,10 +25,10 @@ export const resolvers = {
 };
 
 export const context =  async ({ req }) => {
-  const user = extractJWT(req.headers) as User;
-  if (user) {
-    logger.log('info', `Authorized user: ${user.username}`);
-    return { user };
+  const currentUser = extractJWT(req.headers) as User;
+  if (currentUser) {
+    logger.log('info', `Authorized user: ${currentUser.username}`);
+    return { currentUser };
   }
   throw new AuthenticationError('auth failed');
 };

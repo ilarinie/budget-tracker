@@ -23,7 +23,7 @@ describe('GraphQL server', () => {
       typeDefs,
       resolvers,
       context: async ({ req }) => {
-        return { user };
+        return { currentUser: user };
       }
     });
     client = createTestClient(server);
@@ -61,10 +61,10 @@ describe('GraphQL server', () => {
     const purchase = await client.query({ query: ADD_PURCHASE, variables: { description: 'purch', amount: 22, categories: [retUser.categories[0].id] } });
     res = await client.query({ query: GET_USER });
     retUser = res.data.user;
-    console.log(retUser.purchases);
     assert.equal(retUser.purchases[retUser.purchases.length - 1].amount, 22);
     assert.equal(retUser.purchases[1].description, 'purch');
     assert.equal(retUser.purchases[1].categories[0].name, 'cat1');
+    assert.equal(retUser.total, 43);
   });
 
   it('is able remove purchase', async () => {
@@ -72,6 +72,7 @@ describe('GraphQL server', () => {
     const retUser = res.data.user;
     const purchase = retUser.purchases[0];
     res = await client.query({ query: REMOVE_PURCHASE, variables: { id: purchase.id }});
+    console.log(res.data);
     assert.isTrue(res.data.removePurchase.success);
   });
 

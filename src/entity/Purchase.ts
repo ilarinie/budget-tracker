@@ -1,3 +1,4 @@
+import { IsNumber, Length, Max, Min } from 'class-validator';
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { PurchaseCategory } from './PurchaseCategory';
 import { User } from './User';
@@ -8,9 +9,14 @@ export class Purchase extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: number;
 
+  @Length(3, 50)
   @Column({ nullable: false })
   description!: string;
 
+  @IsNumber()
+  @Min(0, {
+    message: 'Amount must be over 0'
+  })
   @Column({ type: 'float', scale: 6, nullable: false})
   amount!: number;
 

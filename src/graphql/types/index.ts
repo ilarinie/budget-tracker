@@ -1,21 +1,14 @@
 import { gql } from 'apollo-server-core';
+import { Purchases } from './purchases';
 
-export const typeDefs = gql`
+const types = gql`
   type PurchaseCategory {
       id: ID!
       user: User
       name: String
     }
 
-  type Purchase {
-    id: ID!
-    user: User
-    description: String
-    amount: Float
-    categories: [PurchaseCategory]
-    created_at: String
-    updated_at: String
-  }
+
 
   type User {
     id: ID!
@@ -23,6 +16,7 @@ export const typeDefs = gql`
     displayName: String
     purchases: [Purchase]
     categories: [PurchaseCategory]
+    total: Float
   }
 
   type Response {
@@ -53,3 +47,5 @@ export class Response {
 
   success: boolean;
 }
+
+export const typeDefs = [ types, Purchases ];
