@@ -8,6 +8,7 @@ export const GET_USER = gql`
     user {
       username
       id
+      total
       purchases {
         id
         amount

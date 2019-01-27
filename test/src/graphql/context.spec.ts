@@ -23,8 +23,8 @@ describe('Apollo server context spec', () => {
     user.password = 'password123';
     await user.save();
     const token = 'Bearer ' + jwt.sign(JSON.parse(JSON.stringify(user)), process.env.JWT_SECRET as string);
-    const ress = await context({ req: { headers: { authorization: token }}});
-    assert.equal(ress.user.username, user.username);
+    const { currentUser } = await context({ req: { headers: { authorization: token }}});
+    assert.equal(currentUser.username, user.username);
   });
 
   it('wont parse invalid auth token', async () => {
