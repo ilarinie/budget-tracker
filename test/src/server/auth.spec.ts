@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { createConnection, getConnection } from 'typeorm';
 import { closeConnectionIfNecessary, createConnectionIfNecessary } from '../..';
-import { User } from '../../../src/entity/User';
+import { UserAccount } from '../../../src/entity/UserAccount';
 import app from '../../../src/server';
 
 const TEST_AUTH = {
@@ -15,7 +15,7 @@ chai.use(chaiHttp);
 describe('Auth routes', () => {
   before(async () => {
     await createConnectionIfNecessary();
-    const user = new User();
+    const user = new UserAccount();
     user.username = TEST_AUTH.username;
     user.password = TEST_AUTH.password;
     await user.save();

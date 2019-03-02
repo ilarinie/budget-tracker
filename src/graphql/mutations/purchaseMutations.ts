@@ -2,14 +2,16 @@ import { AuthenticationError } from 'apollo-server-express';
 import { validate } from 'class-validator';
 import { Purchase } from '../../entity/Purchase';
 import { PurchaseCategory } from '../../entity/PurchaseCategory';
-import { User } from '../../entity/User';
+import { UserAccount } from '../../entity/UserAccount';
+import logger from '../../logger';
 import { Response } from '../types';
 import { mapValidationErrorsToErrorModel } from '../utils';
 
-export const addPurchase = async (parent, { amount, description, categories }: { amount: number, description: string, categories: string[] | PurchaseCategory[]}, { currentUser }: { currentUser: User}) => {
+export const addPurchase = async (parent, { amount, description, categories }: { amount: number, description: string, categories: string[] | PurchaseCategory[]}, { currentUser }: { currentUser: UserAccount}) => {
   const purchase = new Purchase();
   if (categories) {
     categories = await PurchaseCategory.findByIds(categories);
+    logger.log('info',  'caat' + JSON.stringify(categories));
   }
   purchase.description = description;
   purchase.categories = categories;
@@ -27,7 +29,7 @@ export const addPurchase = async (parent, { amount, description, categories }: {
   }
 };
 
-export const removePurchase = async (parent, args, { currentUser }: { currentUser: User }): Promise<Response> => {
+export const removePurchase = async (parent, args, { currentUser }: { currentUser: UserAccount }): Promise<Response> => {
   const purchase = await Purchase.findOneOrFail(args.id, { relations: ['user'] });
   if (purchase.user.id == currentUser.id) {
     await purchase.remove();
@@ -36,7 +38,7 @@ export const removePurchase = async (parent, args, { currentUser }: { currentUse
   throw new AuthenticationError('Unauthorized');
 };
 
-export const updatePurchase = async (parent, { amount, description, id }: { amount: number, description: string, id: string}, { currentUser }: { currentUser: User }) => {
+export const updatePurchase = async (parent, { amount, description, id }: { amount: number, description: string, id: string}, { currentUser }: { currentUser: UserAccount }) => {
   const purchase = await Purchase.findOneOrFail(id);
   if (purchase.user == currentUser) {
     if (amount !== undefined) {

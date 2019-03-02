@@ -1,10 +1,10 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { PurchaseCategory } from '../../entity/PurchaseCategory';
-import { User } from '../../entity/User';
+import { UserAccount } from '../../entity/UserAccount';
 import logger from '../../logger';
 import { Response } from '../types';
 
-export const addCategory = async (parent, args, { currentUser }: { currentUser: User}) => {
+export const addCategory = async (parent, args, { currentUser }: { currentUser: UserAccount}) => {
   const category = new PurchaseCategory();
   category.name = args.name;
   category.user = currentUser;
@@ -12,7 +12,7 @@ export const addCategory = async (parent, args, { currentUser }: { currentUser: 
   return savedCat;
 };
 
-export const removeCategory = async (parent, args, { currentUser }: { currentUser: User}) => {
+export const removeCategory = async (parent, args, { currentUser }: { currentUser: UserAccount}) => {
   const category = await PurchaseCategory.findOneOrFail(args.id);
   if (category.user = currentUser) {
     await category.remove();
@@ -21,7 +21,7 @@ export const removeCategory = async (parent, args, { currentUser }: { currentUse
   throw new AuthenticationError('Unauthorized');
 };
 
-export const updateCategory = async (parent, args, { currentUser }: { currentUser: User}) => {
+export const updateCategory = async (parent, args, { currentUser }: { currentUser: UserAccount}) => {
   const category = await PurchaseCategory.findOneOrFail(args.id);
   if (category.user == currentUser) {
     if (args.name) {

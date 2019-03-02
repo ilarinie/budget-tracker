@@ -1,13 +1,12 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { User } from '../entity/User';
+import { UserAccount } from '../entity/UserAccount';
 import logger from '../logger';
 
 export const handleLogin = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
-    const user = await User.findOneOrFail({ username: req.body.username });
+    const user = await UserAccount.findOneOrFail({ username: req.body.username });
     const correctPW = await bcrypt.compare(req.body.password, user.password);
     if (correctPW) {
         const token = 'Bearer ' + jwt.sign(JSON.parse(JSON.stringify(user)), process.env.JWT_SECRET as string, { expiresIn: 3600 });

@@ -1,17 +1,19 @@
-import { User } from '../../entity/User';
+import { InvalidGraphQLRequestError } from 'apollo-server-core/dist/requestPipeline';
+import { Purchase } from '../../entity/Purchase';
+import { UserAccount } from '../../entity/UserAccount';
+import logger from '../../logger';
 
 export const user = async (parent, args, { currentUser }) => {
   const id = currentUser.id;
-  const user = await User.findOne({ id }, { relations: [ 'purchases', 'categories', 'purchases.categories' ]}) as User;
-  user.purchases = user.purchases.sort((a, b) => {
-    if (a.created_at == b.created_at) {
-      return 0;
-    }
-    return new Date(a.created_at).getMilliseconds() > new Date(b.created_at).getMilliseconds() ? 1 : -1;
-  });
-  const total = user.purchases.reduce((val, purchase, index) => {
-    return val + purchase.amount;
-  },                                  0);
-  user.total = total;
-  return user;
+  // @ts-ignore
+  const user = await UserAccount.findOne({ id }, { relations: [ 'categories' ]}) as UserAccount;
+  if (!user) {
+    throw new InvalidGraphQLRequestError();
+  }
+  user.purchases = await Purchase.find({ where: { user_id: user.id }, relations: [ 'categories'], order: { created_at: 'DESC'}}) as Purchase[];
+  const { total } = await Purchase.createQueryBuilder('purchase').select('sum(amount)', 'total').where('user_id = :id', { id: user.id}).getRawOne();
+
+  const { monthlyPurchases, monthlyTotal } = await user.getPurchasesAfterLastPayDay(true);
+  const monthlyRemaining = user.monthlyExpendableIncome - monthlyTotal! as number;
+  return { monthlyPurchases, monthlyTotal, total, monthlyRemaining, ...user };
 };

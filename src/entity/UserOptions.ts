@@ -4,9 +4,9 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class UserOptions extends BaseEntity {
 
   @PrimaryGeneratedColumn('uuid')
-  id!: number;
+  id: number;
 
   @Column()
-  theme!: string;
+  theme: string;
 
 }

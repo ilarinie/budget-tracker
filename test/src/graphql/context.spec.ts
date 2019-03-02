@@ -3,7 +3,7 @@ import chaiPromise from 'chai-as-promised';
 import jwt from 'jsonwebtoken';
 import { ConnectionManager, createConnection, getConnection, getConnectionManager } from 'typeorm';
 import { closeConnectionIfNecessary, createConnectionIfNecessary } from '../..';
-import { User } from '../../../src/entity/User';
+import { UserAccount } from '../../../src/entity/UserAccount';
 import { context } from '../../../src/graphql';
 
 chai.use(chaiPromise);
@@ -18,17 +18,19 @@ describe('Apollo server context spec', () => {
   });
 
   it('can parse use from auth token', async () => {
-    const user = new User();
+    const user = new UserAccount();
     user.username = 'muupmaap';
     user.password = 'password123';
     await user.save();
     const token = 'Bearer ' + jwt.sign(JSON.parse(JSON.stringify(user)), process.env.JWT_SECRET as string);
-    const { currentUser } = await context({ req: { headers: { authorization: token }}});
+    const res: any = {};
+    const req: any = { headers: { authorization: token }};
+    const { currentUser } = await context({ req, res });
     assert.equal(currentUser.username, user.username);
   });
 
   it('wont parse invalid auth token', async () => {
-    const user = new User();
+    const user = new UserAccount();
     user.username = 'muupmaap';
     user.password = 'password123';
     await user.save();
@@ -37,6 +39,6 @@ describe('Apollo server context spec', () => {
       authorization: token
     };
 
-    assert.isRejected(context({ req: { headers }}));
+    assert.isRejected(context({ req: { headers }, res: {}}));
   });
 });

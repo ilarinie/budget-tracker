@@ -4,7 +4,7 @@ import { assert } from 'chai';
 import { createConnection, getConnection } from 'typeorm';
 import { closeConnectionIfNecessary, createConnectionIfNecessary } from '../..';
 import { clearDb } from '../../../src/db/seed';
-import { User } from '../../../src/entity/User';
+import { UserAccount } from '../../../src/entity/UserAccount';
 import { resolvers } from '../../../src/graphql';
 import { typeDefs } from '../../../src/graphql/types';
 import { ADD_CATEGORY, ADD_PURCHASE, GET_USER, REMOVE_CATEGORY, REMOVE_PURCHASE } from './testQueries';
@@ -15,9 +15,10 @@ let user;
 describe('GraphQL server', () => {
   before(async () => {
     await createConnectionIfNecessary();
-    user = new User();
+    user = new UserAccount();
     user.username = 'muup';
     user.password = 'password123';
+    user.cutOffDay = 25;
     user = await user.save();
     const server = new ApolloServer({
       typeDefs,

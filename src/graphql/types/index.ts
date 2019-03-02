@@ -17,6 +17,10 @@ const types = gql`
     purchases: [Purchase]
     categories: [PurchaseCategory]
     total: Float
+    monthlyExpendableIncome: Float
+    monthlyPurchases: [Purchase]
+    monthlyTotal: Float
+    monthlyRemaining: Float
   }
 
   type Response {

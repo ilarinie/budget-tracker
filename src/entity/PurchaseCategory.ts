@@ -1,20 +1,20 @@
 import { BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Purchase } from './Purchase';
-import { User } from './User';
+import { UserAccount } from './UserAccount';
 
 @Entity()
 export class PurchaseCategory extends BaseEntity {
 
   @PrimaryGeneratedColumn('uuid')
-  id!: number;
+  id: number;
 
   @Column({ nullable: false })
-  name!: string;
+  name: string;
 
-  @ManyToOne(type => User, user => user.categories, { nullable: false })
-  user!: User;
+  @ManyToOne(type => UserAccount, user => user.categories, { nullable: false })
+  user: UserAccount;
 
   @ManyToMany(type => Purchase, purchase => purchase.categories)
-  purchases!: Purchase[];
+  purchases: Purchase[];
 
 }
