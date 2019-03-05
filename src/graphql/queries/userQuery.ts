@@ -1,4 +1,6 @@
 import { User } from '../../entity/User';
+import { Purchase } from '../../entity/Purchase';
+import { getConnection } from 'typeorm';
 
 export const user = async (parent, args, { currentUser }) => {
   const id = currentUser.id;
@@ -9,9 +11,10 @@ export const user = async (parent, args, { currentUser }) => {
     }
     return new Date(a.created_at).getMilliseconds() > new Date(b.created_at).getMilliseconds() ? 1 : -1;
   });
-  const total = user.purchases.reduce((val, purchase, index) => {
-    return val + purchase.amount;
-  },                                  0);
-  user.total = total;
+  await Promise.all([
+    user.populateTotal(),
+    user.populateMonthlyPurchases(),
+    user.populateMonthlyTotals(),
+  ]);
   return user;
 };

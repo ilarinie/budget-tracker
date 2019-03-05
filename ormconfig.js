@@ -21,7 +21,7 @@ module.exports = {
    host: "localhost",
    port: 5432,
    synchronize: true,
-   logging: false,
+   logging: true,
    entities: [
       "src/entity/**/*.ts"
    ],

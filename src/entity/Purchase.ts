@@ -27,6 +27,7 @@ export class Purchase extends BaseEntity {
   updated_at!: Date;
 
   @ManyToOne(type => User, user => user.purchases, { nullable: false })
+  @JoinColumn({ name: 'user_id'})
   user!: User;
 
   @ManyToMany(type => PurchaseCategory, category => category.purchases)

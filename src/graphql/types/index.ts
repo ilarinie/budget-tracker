@@ -12,9 +12,14 @@ const types = gql`
 
   type User {
     id: ID!
-    username: String
+    usernamse: String
     displayName: String
     purchases: [Purchase]
+    monthlyPurchases: [Purchase]
+    monthlyTotal: Float
+    monthlyExpendableIncome: Float
+    monthlyIncome: Float
+    monthlyRemaining: Float
     categories: [PurchaseCategory]
     total: Float
   }

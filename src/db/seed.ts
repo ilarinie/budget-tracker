@@ -17,6 +17,8 @@ export const seedData = async () => {
   const user = new User();
   user.username = 'muu';
   user.password = 'password123';
+  user.payDate = 25;
+  user.monthlyIncome = 2850;
   const savedUser = await userRepo.save(user);
   logger.log('info', 'Created user with id: ' + savedUser.id);
   const purchaseCategoryRepo = getConnection().getRepository(PurchaseCategory);
@@ -36,6 +38,12 @@ export const seedData = async () => {
     purchase.categories = [];
     purchase.categories.push(savedCat);
     const savedPurch = await purchaseRepo.save(purchase);
+    if (i > 10) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - 1);
+      savedPurch.created_at = date;
+      await getConnection().createQueryBuilder().update(Purchase).set({ created_at: date }).where("id = :id", { id: savedPurch.id }).execute();
+    }
   }
 };
 
